@@ -26,7 +26,7 @@ describe('useRouter', () => {
                 go: vi.fn(),
                 length: 1,
             },
-        } as unknown as globalThis;
+        } as unknown as Window & typeof globalThis;
 
         // Удаляем navigation для тестирования fallback на History API
         delete (window as any).navigation;
