@@ -1,6 +1,7 @@
 # @budarin/the-router
 
 **Минимум кода. Максимум SPA-навигации.**
+
 Инфраструктурный хук для React на **Navigation API** + **URLPattern**. Без провайдеров, без контекста, без бизнес-логики.
 
 [![npm](https://img.shields.io/npm/v/@budarin/the-router?color=cb0000)](https://www.npmjs.com/package/@budarin/the-router)
