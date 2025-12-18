@@ -6,9 +6,9 @@ describe('useRouter', () => {
     let originalWindow: typeof window;
 
     beforeEach(() => {
-        originalWindow = global.window;
+        originalWindow = window;
 
-        global.window = {
+        window = {
             ...originalWindow,
             location: {
                 href: 'http://localhost/',
@@ -26,14 +26,14 @@ describe('useRouter', () => {
                 go: vi.fn(),
                 length: 1,
             },
-        } as Window & typeof globalThis;
+        } as unknown as globalThis;
 
         // Удаляем navigation для тестирования fallback на History API
-        delete (global.window as any).navigation;
+        delete (window as any).navigation;
     });
 
     afterEach(() => {
-        global.window = originalWindow;
+        window = originalWindow;
         vi.clearAllMocks();
     });
 
@@ -56,8 +56,8 @@ describe('useRouter', () => {
         });
 
         it('должен возвращать текущий pathname', () => {
-            global.window.location.pathname = '/users/123';
-            global.window.location.href = 'http://localhost/users/123';
+            window.location.pathname = '/users/123';
+            window.location.href = 'http://localhost/users/123';
 
             const { result } = renderHook(() => useRouter());
 
@@ -65,8 +65,8 @@ describe('useRouter', () => {
         });
 
         it('должен парсить search params', () => {
-            global.window.location.href = 'http://localhost/posts?page=2&sort=date';
-            global.window.location.search = '?page=2&sort=date';
+            window.location.href = 'http://localhost/posts?page=2&sort=date';
+            window.location.search = '?page=2&sort=date';
 
             const { result } = renderHook(() => useRouter());
 
@@ -77,8 +77,8 @@ describe('useRouter', () => {
 
     describe('Параметры из роутов (URLPattern)', () => {
         it('должен парсить параметры из knownRoutes', () => {
-            global.window.location.pathname = '/users/123';
-            global.window.location.href = 'http://localhost/users/123';
+            window.location.pathname = '/users/123';
+            window.location.href = 'http://localhost/users/123';
 
             const { result } = renderHook(() =>
                 useRouter({
@@ -90,8 +90,8 @@ describe('useRouter', () => {
         });
 
         it('должен парсить несколько параметров', () => {
-            global.window.location.pathname = '/posts/2024/my-post';
-            global.window.location.href = 'http://localhost/posts/2024/my-post';
+            window.location.pathname = '/posts/2024/my-post';
+            window.location.href = 'http://localhost/posts/2024/my-post';
 
             const { result } = renderHook(() =>
                 useRouter({
@@ -106,8 +106,8 @@ describe('useRouter', () => {
         });
 
         it('должен возвращать пустой объект, если роут не совпал', () => {
-            global.window.location.pathname = '/unknown';
-            global.window.location.href = 'http://localhost/unknown';
+            window.location.pathname = '/unknown';
+            window.location.href = 'http://localhost/unknown';
 
             const { result } = renderHook(() =>
                 useRouter({
@@ -121,8 +121,8 @@ describe('useRouter', () => {
 
     describe('Навигация через History API', () => {
         it('должен использовать History API для navigate', async () => {
-            const replaceStateSpy = vi.spyOn(global.window.history, 'replaceState');
-            const pushStateSpy = vi.spyOn(global.window.history, 'pushState');
+            const replaceStateSpy = vi.spyOn(window.history, 'replaceState');
+            const pushStateSpy = vi.spyOn(window.history, 'pushState');
 
             const { result } = renderHook(() => useRouter());
 
@@ -143,7 +143,7 @@ describe('useRouter', () => {
         });
 
         it('должен вызывать history.back', () => {
-            const backSpy = vi.spyOn(global.window.history, 'back');
+            const backSpy = vi.spyOn(window.history, 'back');
 
             const { result } = renderHook(() => useRouter());
 
@@ -157,7 +157,7 @@ describe('useRouter', () => {
         });
 
         it('должен вызывать history.forward', () => {
-            const forwardSpy = vi.spyOn(global.window.history, 'forward');
+            const forwardSpy = vi.spyOn(window.history, 'forward');
 
             const { result } = renderHook(() => useRouter());
 
@@ -173,9 +173,7 @@ describe('useRouter', () => {
 
     describe('Опции', () => {
         it('должен использовать настраиваемый лимит кэша', () => {
-            const { result } = renderHook(() =>
-                useRouter()
-            );
+            const { result } = renderHook(() => useRouter());
 
             expect(result.current).toBeDefined();
             // Проверяем, что хук работает с настройками
