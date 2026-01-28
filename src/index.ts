@@ -45,12 +45,11 @@ function testPattern(compiled: URLPattern | RegExp, pathname: string): boolean {
 // Подписка на изменения навигации (navigate + currententrychange)[web:225][web:220]
 function subscribeNavigation(navigation: Navigation) {
     return (callback: () => void) => {
-        const update = () => callback();
-        navigation.addEventListener('navigate', update);
-        navigation.addEventListener('currententrychange', update);
+        navigation.addEventListener('navigate', callback);
+        navigation.addEventListener('currententrychange', callback);
         return () => {
-            navigation.removeEventListener('navigate', update);
-            navigation.removeEventListener('currententrychange', update);
+            navigation.removeEventListener('navigate', callback);
+            navigation.removeEventListener('currententrychange', callback);
         };
     };
 }
@@ -88,9 +87,7 @@ function getCachedParsedUrl(urlStr: string): URL {
     try {
         const parsed = new URL(urlStr, base);
         const limit = getRouterConfig().urlCacheLimit;
-        if (cache.has(urlStr)) {
-            cache.delete(urlStr);
-        } else if (cache.size >= limit) {
+        if (cache.size >= limit) {
             const firstKey = cache.keys().next().value;
             if (firstKey !== undefined) cache.delete(firstKey);
         }
