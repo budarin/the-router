@@ -52,7 +52,7 @@ npm i @budarin/use-route
 ```
 
 ```typescript
-import { useRoute, configureRoute } from '@budarin/use-route';
+import { useRoute } from '@budarin/use-route';
 
 
 function App() {
