@@ -9,7 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
-Fix sample in readme
+- Fix sample in readme
+- Deps upgrade
 
 ## [1.6.0] - 2026-02-11
 
